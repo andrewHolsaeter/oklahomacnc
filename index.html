@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oklahoma CNC Machining</title>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<nav>
+  <a href="#home">Home</a>
+  <a href="#portfolio">Portfolio</a>
+  <a href="#about">About</a>
+  <a href="#contact">Contact</a>
+</nav>
+
+<main>
+  <section id="home" class="tab-content"> 
+    <h1>Welcome to Our CNC Shop</h1>
+    <p>High precision machining services.</p>
+  </section>
+
+  <section id="portfolio" class="tab-content" style="display:none;">
+    <h1>Portfolio</h1>
+    <div class="gallery">
+      <img src="assets/images/part1.jpg" alt="Part 1">
+      <img src="assets/images/part2.jpg" alt="Part 2">
+    </div>
+  </section>
+
+  <section id="about" class="tab-content" style="display:none;">
+    <h1>About Us</h1>
+    <p>We specialize in 5 axis CNC machining with decades of experience.</p>
+  </section>
+
+  <section id="contact" class="tab-content" style="display:none;">
+    <h1>Contact Us</h1>
+    <form id="contact-form">
+      <input type="text" name="name" placeholder="Your Name" required>
+      <input type="email" name="email" placeholder="Your Email" required>
+      <textarea name="message" placeholder="Your Message" required></textarea>
+      <button type="submit">Send</button>
+    </form>
+    <p id="form-status"></p>
+  </section>
+</main>
+
+<script src="assets/js/app.js"></script>
+</body>
+</html>
