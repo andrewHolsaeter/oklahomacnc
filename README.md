@@ -23,3 +23,13 @@ cnc-website/
     └── workflows/
         └── github-pages.yml   # Optional GitHub Actions deployment workflow 
 ``` 
+
+FROM THE THEME CREATOR:
+```
+ a text-heavy, article-oriented design built around a huge background
+image (with a new parallax implementation I'm testing) and scroll effects (powered by
+Scrollex).
+
+Demo images* courtesy of Unsplash, a radtastic collection of CC0 (public domain) images
+you can use for pretty much whatever.
+```
