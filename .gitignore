@@ -1,3 +1,5 @@
+assets/images/uncompressed/
+
 .venv/
 
 *.pyc
