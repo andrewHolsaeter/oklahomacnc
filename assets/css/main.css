@@ -2572,7 +2572,7 @@ table.alt tbody tr td {
   width: 100%;
   height: 100%;
   background-color: #212931;
-  background-image: url("../../images/overlay.png"), linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url("../../images/bg.jpg");
+  background-image: url("../../images/overlay.png"), linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url("../../assets/images/hero-shell-crop.jpg");
   background-size: auto, auto, 100% auto;
   background-position: center, center, top center;
   background-repeat: repeat, no-repeat, no-repeat;
@@ -2724,7 +2724,7 @@ body.is-preload #intro {
   opacity: 0;
 }
 body.is-preload #intro:not(.hidden) + #header + #nav {
-  transform: translateY(8rem);
+  transform: translateY(4rem);
   opacity: 0;
 }
 @media screen and (max-width: 980px) {
@@ -3669,4 +3669,4 @@ body.is-preload #intro:not(.hidden) + #header + #nav {
     box-shadow: 0 0 1.5rem 0 rgba(0, 0, 0, 0.2);
     visibility: visible;
   }
-}/*# sourceMappingURL=main.css.map */
+}
