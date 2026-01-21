@@ -2087,6 +2087,53 @@
         "Weight": "5.000 lbs \\ 2.300 kgs",
         "Sub Type": "cutting tool kits"
     },
+    "01-0519": {
+        "Name": "60° Indexable Dovetail Cutter, 1.181\" Diameter x 3/4\" Shank x 4.7244\" Overall Length, 3 Inserts",
+        "Vendor": "Haas Tooling",
+        "System of Measurement": "Inch - ANSI",
+        "[ØDC] Cutting Diameter": "1.181 in",
+        "[ØDMM] Shank Diameter": "0.75 in \\ 3/4\"",
+        "[OAL] Overall Length": "4.724 in",
+        "[LH] Head Length": "0.984 in",
+        "[T-MAX] Maximum Depth": "0.196 in",
+        "[Z] Number of Cutting Teeth": "3",
+        "[SIG°] Included Angle": "60",
+        "Insert Style": "D Style - 55° Rhombic",
+        "[IC] Inscribed Circle Diameter": "0.25 in \\ 6.35 mm",
+        "[D1] Insert Hole Size": "0.11 in \\ 2.8 mm",
+        "[RE] Corner Radius": "0.016 in \\ 0.4 mm",
+        "[S] Insert Thickness": "0.094 in \\ 2.38 mm",
+        "Weight": "0.7 lbs \\ 0.3 kg",
+        "Country of Origin": "Taiwan",
+        "Type": "milling",
+        "Sub Type": "indexable dovetail cutters"
+    },
+    "02-0370": {
+        "Name": "DCMT2151-HMP / DCMT070204-HMP, Carbide Turning Insert, 55° Rhombic, Grade HTM15 - Pack of 5",
+        "Vendor": "Haas Tooling",
+        "Primary": [
+            "M - Stainless Steel"
+        ],
+        "Secondary": [
+            "P - Steel",
+            "S - High Temp Alloys"
+        ],
+        "System of Measurement": "Universal - ANSI, ISO",
+        "Clamping Type": "S - Screw-On",
+        "Insert Style": "D Style - 55° Rhombic",
+        "Grade": "HTM15 - Light Interrupted",
+        "Material": "Carbide",
+        "Chipbreaker": "HMP - Medium Positive",
+        "[IC] Inscribed Circle Diameter": "0.25 in \\ 6.35 mm",
+        "[D1] Insert Hole Size": "0.11 in \\ 2.8 mm",
+        "[L10] Cutting Edge Length": "0.305 in \\ 7.75 mm",
+        "[S] Insert Thickness": "0.094 in \\ 2.38 mm",
+        "[RE] Corner Radius": "0.0157 in \\ 0.4 mm",
+        "Weight": "0.1 lbs \\ 0.1 kg",
+        "Country of Origin": "India",
+        "Type": "lathe tooling",
+        "Sub Type": "turning inserts"
+    },
     "03-0113": {
         "Name": "#6-32 UNC HSS-E Spiral Flute Tap, 0.141\" Shank x 0.276\" Thread Length, 2.5XD, Mod. Bottoming, 3 Flute, GH3, TiCN Coated",
         "Vendor": "Haas Tooling",
