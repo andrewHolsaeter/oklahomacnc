@@ -8,7 +8,8 @@ const COLUMN_DEFS = [
   { key: "Sub Type", label: "Sub Type", sortable: true },
   { key: "[ØDC] Cutting Diameter", label: "ØDC", sortable: true },
   { key: "Material", label: "Material", sortable: true },
-  { key: "[LOC] Length Of Cut", label: "LOC", sortable: true}
+  { key: "[LOC] Length Of Cut", label: "LOC", sortable: true},
+  { key: "[OAL] Overall Length", label: "Overall Length", sortable: true }
 ];
 
 const IMAGE_BASE_PATH = "data/images/";
