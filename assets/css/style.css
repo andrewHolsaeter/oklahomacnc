@@ -1,3 +1,144 @@
 .tour-item {
     display: flow-root;
 }
+/* Quote request form: themed to match the Massively template */
+.quote-page header.major {
+    margin-bottom: 2rem;
+}
+
+.quote-form {
+    margin-top: 1rem;
+}
+
+.quote-form input[type="file"] {
+    width: 100%;
+}
+
+.quote-options {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem 1.25rem;
+    margin-top: 0.5rem;
+}
+
+.quote-options input[type="checkbox"] + label {
+    margin-bottom: 0;
+}
+
+.quote-upload {
+    border: solid 2px #eeeeee;
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.quote-upload:hover,
+.quote-upload.dragover {
+    border-color: #18bfef;
+    background: rgba(24, 191, 239, 0.06);
+}
+
+.quote-upload .icon {
+    display: block;
+    color: #18bfef;
+    font-size: 2rem;
+    margin: 0 0 0.75rem 0;
+}
+
+.quote-upload strong {
+    display: block;
+    font-family: "Source Sans Pro", Helvetica, sans-serif;
+    font-size: 0.95rem;
+    font-weight: 900;
+    letter-spacing: 0.075em;
+    text-transform: uppercase;
+}
+
+.quote-upload small {
+    display: block;
+    color: #717981;
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+}
+
+.quote-upload input[type="file"] {
+    position: absolute;
+    left: -9999px;
+}
+
+.quote-file-list {
+    list-style: none;
+    margin: 1rem 0 0 0;
+    padding: 0;
+}
+
+.quote-file-list li {
+    border: solid 2px #eeeeee;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.quote-file-size {
+    color: #717981;
+    white-space: nowrap;
+}
+
+.quote-status {
+    text-align: center;
+    font-family: "Source Sans Pro", Helvetica, sans-serif;
+    font-weight: 900;
+    letter-spacing: 0.075em;
+    text-transform: uppercase;
+    margin-top: 1rem;
+}
+
+.quote-status-loading {
+    color: #717981;
+}
+
+.quote-status-success {
+    color: #168a49;
+}
+
+.quote-status-error {
+    color: #c0392b;
+}
+
+.quote-note {
+    color: #717981;
+    font-size: 0.85rem;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.quote-honeypot {
+    position: absolute !important;
+    left: -9999px !important;
+    width: 1px !important;
+    height: 1px !important;
+    opacity: 0 !important;
+}
+
+@media screen and (max-width: 736px) {
+    .quote-upload {
+        padding: 1.5rem 1rem;
+    }
+
+    .quote-options {
+        grid-template-columns: 1fr;
+    }
+
+    .quote-file-list li {
+        display: block;
+    }
+
+    .quote-file-size {
+        display: block;
+        margin-top: 0.25rem;
+    }
+}

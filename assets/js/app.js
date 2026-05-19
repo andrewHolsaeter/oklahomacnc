@@ -1,44 +1,6 @@
-// Tab navigation
-/* document.querySelectorAll('nav a').forEach(link => {
-  link.addEventListener('click', e => {
-    e.preventDefault();
-    const target = e.target.getAttribute('data-page'); //.substring(1);
-    console.log(e);
-
-    document.querySelectorAll('.tab-content').forEach(div => div.style.display = 'none');
-    document.getElementById(target).style.display = 'block';
-  });
-}); */
-
-// Contact form submission
-/* const form = document.getElementById('contact-form');
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const status = document.getElementById('form-status');
-  const data = Object.fromEntries(new FormData(form));
-
-  try {
-    const response = await fetch('/contact', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(data)
-    });
-
-    const result = await response.json();
-    if (result.success) {
-      status.textContent = "Message sent!";
-      form.reset();
-    } else {
-      status.textContent = "Failed to send message.";
-    }
-  } catch (err) {
-    status.textContent = "Error sending message.";
-    console.error(err);
-  }
-}); */
-
 const content = document.getElementById("main");
 const navItems = document.querySelectorAll("#nav ul.links li");
+const FORMINIT_FORM_ID = "kp7fefd16oo";
 
 async function loadPage(page) {
   const response = await fetch(`partials/${page}.html`);
@@ -46,6 +8,10 @@ async function loadPage(page) {
   content.innerHTML = html;
 
   setActiveTab(page);
+
+  if (page === "contact") {
+    initQuoteForm();
+  }
 }
 
 function setActiveTab(page) {
@@ -57,25 +23,219 @@ function setActiveTab(page) {
   });
 }
 
-// Handle nav clicks
-navItems.forEach(li => {
-  const link = li.querySelector("a");
-  if (!link || !link.dataset.page) return;
+function goToPage(page) {
+  history.pushState({}, "", `#${page}`);
+  loadPage(page);
+}
 
-  link.addEventListener("click", e => {
-    e.preventDefault();
-    const page = link.dataset.page;
+function initPageLinks(scope = document) {
+  scope.querySelectorAll("a[data-page]").forEach(link => {
+    if (link.dataset.boundPageLink === "true") return;
+    link.dataset.boundPageLink = "true";
 
-    history.pushState({}, "", `#${page}`);
-    loadPage(page);
+    link.addEventListener("click", event => {
+      event.preventDefault();
+      goToPage(link.dataset.page);
+    });
   });
-});
+}
 
-// Initial load (supports refresh & direct links)
+function initQuoteForm() {
+  const form = document.getElementById("quote-form");
+  if (!form || form.dataset.initialized === "true") return;
+
+  form.dataset.initialized = "true";
+
+  const uploadBox = document.getElementById("quote-upload");
+  const fileInput = document.getElementById("quote-files");
+  const fileList = document.getElementById("quote-file-list");
+  const fileError = document.getElementById("quote-file-error");
+  const status = document.getElementById("quote-form-status");
+  const submitButton = form.querySelector('button[type="submit"]');
+  const phoneInput = document.getElementById("quote-phone");
+  const phoneE164Input = document.getElementById("quote-phone-e164");
+
+  const allowedExtensions = [
+    "jpg", "jpeg", "png", "webp", "pdf",
+    "stl", "obj", "step", "stp", "iges", "igs", "3mf", "zip"
+  ];
+  const maxFileSize = 25 * 1024 * 1024;
+
+  function formatBytes(bytes) {
+    if (bytes === 0) return "0 Bytes";
+    const sizes = ["Bytes", "KB", "MB", "GB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(1024));
+    return `${(bytes / Math.pow(1024, i)).toFixed(1)} ${sizes[i]}`;
+  }
+
+  function getExtension(filename) {
+    return filename.includes(".") ? filename.split(".").pop().toLowerCase() : "";
+  }
+
+  function validateFiles(files) {
+    return Array.from(files).every(file => {
+      const extension = getExtension(file.name);
+      return allowedExtensions.includes(extension) && file.size <= maxFileSize;
+    });
+  }
+
+
+  function parseUsPhone(value) {
+    const raw = value.trim();
+    if (!raw) return "";
+
+    // Accept common U.S. inputs such as:
+    // 5551234567, 555-123-4567, (555) 123-4567, 1-555-123-4567, +1 555 123 4567.
+    // For Forminit's sender.phone field, only send a normalized E.164 value when it also
+    // matches the North American Numbering Plan: area code and exchange start with 2-9.
+    let digits = raw.replace(/\D/g, "");
+
+    if (digits.length === 11 && digits.startsWith("1")) {
+      digits = digits.slice(1);
+    }
+
+    if (digits.length !== 10) return null;
+
+    const areaCodeStartsValid = /^[2-9]/.test(digits);
+    const exchangeStartsValid = /^[2-9]/.test(digits.slice(3));
+
+    if (!areaCodeStartsValid || !exchangeStartsValid) {
+      return null;
+    }
+
+    return `+1${digits}`;
+  }
+
+  function renderFiles() {
+    fileList.innerHTML = "";
+    fileError.hidden = true;
+
+    const files = Array.from(fileInput.files);
+    if (!files.length) return;
+
+    files.forEach(file => {
+      const item = document.createElement("li");
+      const name = document.createElement("span");
+      const size = document.createElement("span");
+
+      name.textContent = file.name;
+      size.textContent = formatBytes(file.size);
+      size.className = "quote-file-size";
+
+      item.append(name, size);
+      fileList.appendChild(item);
+    });
+
+    fileError.hidden = validateFiles(files);
+  }
+
+  uploadBox.addEventListener("click", () => fileInput.click());
+  uploadBox.addEventListener("keydown", event => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      fileInput.click();
+    }
+  });
+
+  uploadBox.addEventListener("dragover", event => {
+    event.preventDefault();
+    uploadBox.classList.add("dragover");
+  });
+
+  uploadBox.addEventListener("dragleave", () => uploadBox.classList.remove("dragover"));
+
+  uploadBox.addEventListener("drop", event => {
+    event.preventDefault();
+    uploadBox.classList.remove("dragover");
+    fileInput.files = event.dataTransfer.files;
+    renderFiles();
+  });
+
+  fileInput.addEventListener("change", renderFiles);
+
+  form.addEventListener("submit", async event => {
+    event.preventDefault();
+
+    const files = Array.from(fileInput.files);
+    const honeypot = form.querySelector('input[name="website"]');
+
+    if (honeypot && honeypot.value.trim() !== "") return;
+
+    if (files.length && !validateFiles(files)) {
+      fileError.hidden = false;
+      status.textContent = "Please remove unsupported or oversized files before submitting.";
+      status.className = "quote-status quote-status-error";
+      return;
+    }
+
+    // Keep the visible phone field exactly as the visitor typed it.
+    // If it is a valid U.S. number, also send a normalized E.164 copy to Forminit's sender.phone field.
+    // If it is not a real NANP-style number, still send the typed value as regular text instead of
+    // letting Forminit reject the whole quote request.
+    if (phoneE164Input) {
+      phoneE164Input.disabled = true;
+      phoneE164Input.value = "";
+    }
+
+    if (phoneInput && phoneInput.value.trim() !== "") {
+      const normalizedPhone = parseUsPhone(phoneInput.value);
+
+      if (normalizedPhone && phoneE164Input) {
+        phoneE164Input.value = normalizedPhone;
+        phoneE164Input.disabled = false;
+      }
+    }
+
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    if (typeof Forminit === "undefined") {
+      status.textContent = "Form service did not load. Please refresh the page and try again.";
+      status.className = "quote-status quote-status-error";
+      return;
+    }
+
+    const originalText = submitButton.textContent;
+    submitButton.disabled = true;
+    submitButton.textContent = "Sending...";
+    status.textContent = "Sending your quote request...";
+    status.className = "quote-status quote-status-loading";
+
+    try {
+      const forminit = new Forminit();
+      const { error } = await forminit.submit(FORMINIT_FORM_ID, new FormData(form));
+
+      if (error) {
+        status.textContent = error.message || "Something went wrong. Please try again.";
+        status.className = "quote-status quote-status-error";
+        return;
+      }
+
+      form.reset();
+      fileList.innerHTML = "";
+      fileError.hidden = true;
+      status.textContent = "Thanks — your quote request was sent successfully.";
+      status.className = "quote-status quote-status-success";
+    } catch (error) {
+      status.textContent = "Something went wrong. Please try again.";
+      status.className = "quote-status quote-status-error";
+      console.error(error);
+    } finally {
+      submitButton.disabled = false;
+      submitButton.textContent = originalText;
+    }
+  });
+}
+
+initPageLinks(document);
+
+// Initial load supports refresh and direct links.
 const initialPage = location.hash.replace("#", "") || "about";
 loadPage(initialPage);
 
-// Back / forward support
+// Back / forward support.
 window.addEventListener("popstate", () => {
   const page = location.hash.replace("#", "") || "about";
   loadPage(page);
