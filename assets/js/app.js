@@ -1,6 +1,6 @@
 const content = document.getElementById("main");
 const navItems = document.querySelectorAll("#nav ul.links li");
-const FORMINIT_FORM_ID = "kp7fefd16oo";
+const FORMINIT_FORM_ID = "geeoozyqna8";
 
 async function loadPage(page) {
   const response = await fetch(`partials/${page}.html`);
