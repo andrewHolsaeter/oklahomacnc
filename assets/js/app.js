@@ -227,8 +227,13 @@ function initQuoteForm() {
         throw new Error("reCAPTCHA is not available right now.");
       }
 
-      await window.grecaptcha.ready();
-      const token = await window.grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: "quote_submit" });
+      const token = await new Promise((resolve, reject) => {
+        window.grecaptcha.ready(() => {
+          window.grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: "quote_submit" })
+            .then(resolve)
+            .catch(reject);
+        });
+      });
 
       if (!token) {
         throw new Error("reCAPTCHA verification failed.");
