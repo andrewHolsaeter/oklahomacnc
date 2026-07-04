@@ -55,9 +55,7 @@ function initQuoteForm() {
   const submitButton = form.querySelector('button[type="submit"]');
   const phoneInput = document.getElementById("quote-phone");
   const phoneE164Input = document.getElementById("quote-phone-e164");
-  const recaptchaContainer = document.getElementById("quote-recaptcha");
   const recaptchaResponseInput = document.getElementById("quote-recaptcha-response");
-  let recaptchaWidgetId = null;
 
   const allowedExtensions = [
     "jpg", "jpeg", "png", "webp", "pdf",
@@ -133,51 +131,25 @@ function initQuoteForm() {
     fileError.hidden = validateFiles(files);
   }
 
-  function renderRecaptcha() {
-    if (!recaptchaContainer || typeof window.grecaptcha === "undefined" || !window.grecaptcha.render) return;
-
-    if (recaptchaWidgetId !== null) {
-      window.grecaptcha.reset(recaptchaWidgetId);
-      return;
+  window.onQuoteRecaptchaSuccess = response => {
+    if (recaptchaResponseInput) {
+      recaptchaResponseInput.value = response;
     }
+  };
 
-    recaptchaWidgetId = window.grecaptcha.render(recaptchaContainer, {
-      sitekey: RECAPTCHA_SITE_KEY,
-      callback: response => {
-        if (recaptchaResponseInput) {
-          recaptchaResponseInput.value = response;
-        }
-      },
-      "expired-callback": () => {
-        if (recaptchaResponseInput) {
-          recaptchaResponseInput.value = "";
-        }
-      }
-    });
-  }
+  window.onQuoteRecaptchaExpired = () => {
+    if (recaptchaResponseInput) {
+      recaptchaResponseInput.value = "";
+    }
+  };
 
   function loadRecaptchaScript() {
-    if (!recaptchaContainer) return;
-
-    if (typeof window.grecaptcha !== "undefined" && window.grecaptcha.render) {
-      renderRecaptcha();
-      return;
-    }
-
-    const existingScript = document.querySelector('script[src*="recaptcha/api.js"]');
-    if (existingScript) {
-      if (existingScript.dataset.recaptchaBound !== "true") {
-        existingScript.addEventListener("load", renderRecaptcha, { once: true });
-        existingScript.dataset.recaptchaBound = "true";
-      }
-      return;
-    }
+    if (document.querySelector('script[src*="recaptcha/api.js"]')) return;
 
     const script = document.createElement("script");
-    script.src = "https://www.google.com/recaptcha/api.js?render=explicit";
+    script.src = "https://www.google.com/recaptcha/api.js";
     script.async = true;
     script.defer = true;
-    script.onload = renderRecaptcha;
     document.body.appendChild(script);
   }
 
@@ -276,8 +248,8 @@ function initQuoteForm() {
       if (recaptchaResponseInput) {
         recaptchaResponseInput.value = "";
       }
-      if (typeof window.grecaptcha !== "undefined" && recaptchaWidgetId !== null) {
-        window.grecaptcha.reset(recaptchaWidgetId);
+      if (typeof window.grecaptcha !== "undefined") {
+        window.grecaptcha.reset();
       }
       fileList.innerHTML = "";
       fileError.hidden = true;
@@ -287,8 +259,8 @@ function initQuoteForm() {
       if (recaptchaResponseInput) {
         recaptchaResponseInput.value = "";
       }
-      if (typeof window.grecaptcha !== "undefined" && recaptchaWidgetId !== null) {
-        window.grecaptcha.reset(recaptchaWidgetId);
+      if (typeof window.grecaptcha !== "undefined") {
+        window.grecaptcha.reset();
       }
       status.textContent = "Something went wrong. Please try again.";
       status.className = "quote-status quote-status-error";
