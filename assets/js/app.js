@@ -131,23 +131,17 @@ function initQuoteForm() {
     fileError.hidden = validateFiles(files);
   }
 
-  window.onQuoteRecaptchaSuccess = response => {
+  function setRecaptchaToken(token) {
     if (recaptchaResponseInput) {
-      recaptchaResponseInput.value = response;
+      recaptchaResponseInput.value = token || "";
     }
-  };
-
-  window.onQuoteRecaptchaExpired = () => {
-    if (recaptchaResponseInput) {
-      recaptchaResponseInput.value = "";
-    }
-  };
+  }
 
   function loadRecaptchaScript() {
     if (document.querySelector('script[src*="recaptcha/api.js"]')) return;
 
     const script = document.createElement("script");
-    script.src = "https://www.google.com/recaptcha/api.js";
+    script.src = `https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_SITE_KEY}`;
     script.async = true;
     script.defer = true;
     document.body.appendChild(script);
@@ -185,12 +179,6 @@ function initQuoteForm() {
     const honeypot = form.querySelector('input[name="website"]');
 
     if (honeypot && honeypot.value.trim() !== "") return;
-
-    if (!recaptchaResponseInput || !recaptchaResponseInput.value.trim()) {
-      status.textContent = "Please complete the reCAPTCHA verification.";
-      status.className = "quote-status quote-status-error";
-      return;
-    }
 
     if (files.length && !validateFiles(files)) {
       fileError.hidden = false;
@@ -230,11 +218,26 @@ function initQuoteForm() {
 
     const originalText = submitButton.textContent;
     submitButton.disabled = true;
-    submitButton.textContent = "Sending...";
-    status.textContent = "Sending your quote request...";
+    submitButton.textContent = "Verifying...";
+    status.textContent = "Checking security verification...";
     status.className = "quote-status quote-status-loading";
 
     try {
+      if (typeof window.grecaptcha === "undefined" || typeof window.grecaptcha.ready !== "function" || typeof window.grecaptcha.execute !== "function") {
+        throw new Error("reCAPTCHA is not available right now.");
+      }
+
+      await window.grecaptcha.ready();
+      const token = await window.grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: "quote_submit" });
+
+      if (!token) {
+        throw new Error("reCAPTCHA verification failed.");
+      }
+
+      setRecaptchaToken(token);
+      submitButton.textContent = "Sending...";
+      status.textContent = "Sending your quote request...";
+
       const forminit = new Forminit();
       const { error } = await forminit.submit(FORMINIT_FORM_ID, new FormData(form));
 
@@ -245,24 +248,14 @@ function initQuoteForm() {
       }
 
       form.reset();
-      if (recaptchaResponseInput) {
-        recaptchaResponseInput.value = "";
-      }
-      if (typeof window.grecaptcha !== "undefined") {
-        window.grecaptcha.reset();
-      }
+      setRecaptchaToken("");
       fileList.innerHTML = "";
       fileError.hidden = true;
       status.textContent = "Thanks — your quote request was sent successfully.";
       status.className = "quote-status quote-status-success";
     } catch (error) {
-      if (recaptchaResponseInput) {
-        recaptchaResponseInput.value = "";
-      }
-      if (typeof window.grecaptcha !== "undefined") {
-        window.grecaptcha.reset();
-      }
-      status.textContent = "Something went wrong. Please try again.";
+      setRecaptchaToken("");
+      status.textContent = error.message || "Something went wrong. Please try again.";
       status.className = "quote-status quote-status-error";
       console.error(error);
     } finally {
