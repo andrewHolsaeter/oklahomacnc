@@ -138,10 +138,10 @@ function initQuoteForm() {
   }
 
   function loadRecaptchaScript() {
-    if (document.querySelector('script[src*="recaptcha/api.js"]')) return;
+    if (document.querySelector('script[src*="recaptcha/enterprise.js"]')) return;
 
     const script = document.createElement("script");
-    script.src = `https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_SITE_KEY}`;
+    script.src = `https://www.google.com/recaptcha/enterprise.js?render=${RECAPTCHA_SITE_KEY}`;
     script.async = true;
     script.defer = true;
     document.body.appendChild(script);
@@ -223,13 +223,13 @@ function initQuoteForm() {
     status.className = "quote-status quote-status-loading";
 
     try {
-      if (typeof window.grecaptcha === "undefined" || typeof window.grecaptcha.ready !== "function" || typeof window.grecaptcha.execute !== "function") {
-        throw new Error("reCAPTCHA is not available right now.");
+      if (typeof window.grecaptcha === "undefined" || typeof window.grecaptcha.enterprise === "undefined" || typeof window.grecaptcha.enterprise.ready !== "function" || typeof window.grecaptcha.enterprise.execute !== "function") {
+        throw new Error("reCAPTCHA Enterprise is not available right now.");
       }
 
       const token = await new Promise((resolve, reject) => {
-        window.grecaptcha.ready(() => {
-          window.grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: "quote_submit" })
+        window.grecaptcha.enterprise.ready(() => {
+          window.grecaptcha.enterprise.execute(RECAPTCHA_SITE_KEY, { action: "quote_submit" })
             .then(resolve)
             .catch(reject);
         });
