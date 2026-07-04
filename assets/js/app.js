@@ -1,6 +1,7 @@
 const content = document.getElementById("main");
 const navItems = document.querySelectorAll("#nav ul.links li");
 const FORMINIT_FORM_ID = "geeoozyqna8";
+const RECAPTCHA_SITE_KEY = "6LeNtUQtAAAAAM1bZ5i-EHQ7o-mqqU-XUSpDyrsE";
 
 async function loadPage(page) {
   const response = await fetch(`partials/${page}.html`);
@@ -54,6 +55,9 @@ function initQuoteForm() {
   const submitButton = form.querySelector('button[type="submit"]');
   const phoneInput = document.getElementById("quote-phone");
   const phoneE164Input = document.getElementById("quote-phone-e164");
+  const recaptchaContainer = document.getElementById("quote-recaptcha");
+  const recaptchaResponseInput = document.getElementById("quote-recaptcha-response");
+  let recaptchaWidgetId = null;
 
   const allowedExtensions = [
     "jpg", "jpeg", "png", "webp", "pdf",
@@ -129,6 +133,54 @@ function initQuoteForm() {
     fileError.hidden = validateFiles(files);
   }
 
+  function renderRecaptcha() {
+    if (!recaptchaContainer || typeof window.grecaptcha === "undefined" || !window.grecaptcha.render) return;
+
+    if (recaptchaWidgetId !== null) {
+      window.grecaptcha.reset(recaptchaWidgetId);
+      return;
+    }
+
+    recaptchaWidgetId = window.grecaptcha.render(recaptchaContainer, {
+      sitekey: RECAPTCHA_SITE_KEY,
+      callback: response => {
+        if (recaptchaResponseInput) {
+          recaptchaResponseInput.value = response;
+        }
+      },
+      "expired-callback": () => {
+        if (recaptchaResponseInput) {
+          recaptchaResponseInput.value = "";
+        }
+      }
+    });
+  }
+
+  function loadRecaptchaScript() {
+    if (!recaptchaContainer) return;
+
+    if (typeof window.grecaptcha !== "undefined" && window.grecaptcha.render) {
+      renderRecaptcha();
+      return;
+    }
+
+    const existingScript = document.querySelector('script[src*="recaptcha/api.js"]');
+    if (existingScript) {
+      if (existingScript.dataset.recaptchaBound !== "true") {
+        existingScript.addEventListener("load", renderRecaptcha, { once: true });
+        existingScript.dataset.recaptchaBound = "true";
+      }
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = "https://www.google.com/recaptcha/api.js?render=explicit";
+    script.async = true;
+    script.defer = true;
+    script.onload = renderRecaptcha;
+    document.body.appendChild(script);
+  }
+
   uploadBox.addEventListener("click", () => fileInput.click());
   uploadBox.addEventListener("keydown", event => {
     if (event.key === "Enter" || event.key === " ") {
@@ -152,6 +204,7 @@ function initQuoteForm() {
   });
 
   fileInput.addEventListener("change", renderFiles);
+  loadRecaptchaScript();
 
   form.addEventListener("submit", async event => {
     event.preventDefault();
@@ -160,6 +213,12 @@ function initQuoteForm() {
     const honeypot = form.querySelector('input[name="website"]');
 
     if (honeypot && honeypot.value.trim() !== "") return;
+
+    if (!recaptchaResponseInput || !recaptchaResponseInput.value.trim()) {
+      status.textContent = "Please complete the reCAPTCHA verification.";
+      status.className = "quote-status quote-status-error";
+      return;
+    }
 
     if (files.length && !validateFiles(files)) {
       fileError.hidden = false;
@@ -214,11 +273,23 @@ function initQuoteForm() {
       }
 
       form.reset();
+      if (recaptchaResponseInput) {
+        recaptchaResponseInput.value = "";
+      }
+      if (typeof window.grecaptcha !== "undefined" && recaptchaWidgetId !== null) {
+        window.grecaptcha.reset(recaptchaWidgetId);
+      }
       fileList.innerHTML = "";
       fileError.hidden = true;
       status.textContent = "Thanks — your quote request was sent successfully.";
       status.className = "quote-status quote-status-success";
     } catch (error) {
+      if (recaptchaResponseInput) {
+        recaptchaResponseInput.value = "";
+      }
+      if (typeof window.grecaptcha !== "undefined" && recaptchaWidgetId !== null) {
+        window.grecaptcha.reset(recaptchaWidgetId);
+      }
       status.textContent = "Something went wrong. Please try again.";
       status.className = "quote-status quote-status-error";
       console.error(error);
