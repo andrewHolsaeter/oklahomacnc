@@ -2,31 +2,63 @@ const content = document.getElementById("main");
 const navItems = document.querySelectorAll("#nav ul.links li");
 const FORMINIT_FORM_ID = "geeoozyqna8";
 const RECAPTCHA_SITE_KEY = "6LeNtUQtAAAAAM1bZ5i-EHQ7o-mqqU-XUSpDyrsE";
+const KNOWN_PAGES = new Set(["about", "contact"]);
+const HOME_PAGE = "about";
 
-async function loadPage(page) {
-  const response = await fetch(`partials/${page}.html`);
-  const html = await response.text();
-  content.innerHTML = html;
+async function loadPage(page, section = null) {
+  const safePage = KNOWN_PAGES.has(page) ? page : HOME_PAGE;
 
-  setActiveTab(page);
+  try {
+    const response = await fetch(`partials/${safePage}.html`);
+    if (!response.ok) throw new Error(`Unable to load ${safePage}.`);
 
-  if (page === "contact") {
-    initQuoteForm();
+    const html = await response.text();
+    content.innerHTML = html;
+
+    initPageLinks(content);
+    setActiveTab(safePage, section);
+
+    if (safePage === "contact") {
+      initQuoteForm();
+    }
+
+    if (section) {
+      scrollToSection(section);
+    }
+  } catch (error) {
+    console.error(error);
+    content.innerHTML = `<article class="post"><header class="major"><h2>Page unavailable</h2><p>Please refresh and try again.</p></header></article>`;
   }
 }
 
-function setActiveTab(page) {
+function setActiveTab(page, section = null) {
   navItems.forEach(li => {
     const link = li.querySelector("a");
-    const isActive = link?.dataset.page === page;
+    const isActive = section
+      ? link?.dataset.section === section
+      : link?.dataset.page === page;
 
-    li.classList.toggle("active", isActive);
+    li.classList.toggle("active", Boolean(isActive));
+  });
+}
+
+function scrollToSection(section) {
+  requestAnimationFrame(() => {
+    const target = document.getElementById(section);
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   });
 }
 
 function goToPage(page) {
   history.pushState({}, "", `#${page}`);
   loadPage(page);
+}
+
+function goToSection(section) {
+  history.pushState({}, "", `#${section}`);
+  loadPage(HOME_PAGE, section);
 }
 
 function initPageLinks(scope = document) {
@@ -37,6 +69,16 @@ function initPageLinks(scope = document) {
     link.addEventListener("click", event => {
       event.preventDefault();
       goToPage(link.dataset.page);
+    });
+  });
+
+  scope.querySelectorAll("a[data-section]").forEach(link => {
+    if (link.dataset.boundSectionLink === "true") return;
+    link.dataset.boundSectionLink = "true";
+
+    link.addEventListener("click", event => {
+      event.preventDefault();
+      goToSection(link.dataset.section);
     });
   });
 }
@@ -80,7 +122,6 @@ function initQuoteForm() {
       return allowedExtensions.includes(extension) && file.size <= maxFileSize;
     });
   }
-
 
   function parseUsPhone(value) {
     const raw = value.trim();
@@ -270,14 +311,26 @@ function initQuoteForm() {
   });
 }
 
+function resolveInitialRoute() {
+  const route = location.hash.replace("#", "");
+
+  if (!route) {
+    return { page: HOME_PAGE, section: null };
+  }
+
+  if (KNOWN_PAGES.has(route)) {
+    return { page: route, section: null };
+  }
+
+  return { page: HOME_PAGE, section: route };
+}
+
 initPageLinks(document);
 
-// Initial load supports refresh and direct links.
-const initialPage = location.hash.replace("#", "") || "about";
-loadPage(initialPage);
+const initialRoute = resolveInitialRoute();
+loadPage(initialRoute.page, initialRoute.section);
 
-// Back / forward support.
 window.addEventListener("popstate", () => {
-  const page = location.hash.replace("#", "") || "about";
-  loadPage(page);
+  const route = resolveInitialRoute();
+  loadPage(route.page, route.section);
 });

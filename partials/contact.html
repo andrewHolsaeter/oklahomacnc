@@ -1,110 +1,124 @@
-<!-- Quote Request -->
 <article class="post quote-page">
-  <header class="major">
-    <h2>Request a Quote</h2>
-    <p>Upload drawings, photos, CAD files, or 3D models and tell us what you need. We’ll review the details and follow up with pricing.</p>
+  <header class="major quote-header">
+    <p class="eyebrow">Request a Quote</p>
+    <h2>Tell me what you need made.</h2>
+    <p>Upload drawings, photos, CAD files, or 3D models and include the part requirements you know. I’ll review the details and follow up with pricing or practical next steps.</p>
   </header>
 
-  <form id="quote-form" class="quote-form" enctype="multipart/form-data" novalidate>
-    <div class="fields">
-      <div class="field half">
-        <label for="quote-name">Name *</label>
-        <input type="text" id="quote-name" name="fi-sender-fullName" autocomplete="name" required />
-      </div>
+  <div class="quote-layout">
+    <aside class="quote-sidebar">
+      <h3>Helpful quote details</h3>
+      <ul>
+        <li>STEP, STL, PDF drawing, or clear photos</li>
+        <li>Material and quantity</li>
+        <li>Critical dimensions or tolerances</li>
+        <li>Finish requirements and target deadline</li>
+        <li>How the part will be used</li>
+      </ul>
+      <p>Not sure what to send? A rough description is enough to start a conversation.</p>
+    </aside>
 
-      <div class="field half">
-        <label for="quote-company">Company</label>
-        <input type="text" id="quote-company" name="fi-text-company" autocomplete="organization" />
-      </div>
+    <form id="quote-form" class="quote-form" enctype="multipart/form-data" novalidate>
+      <div class="fields">
+        <div class="field half">
+          <label for="quote-name">Name *</label>
+          <input type="text" id="quote-name" name="fi-sender-fullName" autocomplete="name" required />
+        </div>
 
-      <div class="field half">
-        <label for="quote-email">Email *</label>
-        <input type="email" id="quote-email" name="fi-sender-email" autocomplete="email" required />
-      </div>
+        <div class="field half">
+          <label for="quote-company">Company</label>
+          <input type="text" id="quote-company" name="fi-text-company" autocomplete="organization" />
+        </div>
 
-      <div class="field half">
-        <label for="quote-phone">Phone</label>
-        <input type="text" id="quote-phone" name="fi-text-phone" autocomplete="tel-national" inputmode="tel" />
-        <input type="hidden" id="quote-phone-e164" name="fi-sender-phone" value="" disabled />
-      </div>
+        <div class="field half">
+          <label for="quote-email">Email *</label>
+          <input type="email" id="quote-email" name="fi-sender-email" autocomplete="email" required />
+        </div>
 
-      <div class="field half">
-        <label for="quote-project-type">Project Type *</label>
-        <select id="quote-project-type" name="fi-select-project_type" required>
-          <option value="">Select one</option>
-          <option value="CNC machining">CNC machining</option>
-          <option value="Product prototype">Product prototype</option>
-          <option value="Repair or replacement part">Repair or replacement part</option>
-          <option value="Design help / CAD modeling">Design help / CAD modeling</option>
-          <option value="Other">Other</option>
-        </select>
-      </div>
+        <div class="field half">
+          <label for="quote-phone">Phone</label>
+          <input type="text" id="quote-phone" name="fi-text-phone" autocomplete="tel-national" inputmode="tel" />
+          <input type="hidden" id="quote-phone-e164" name="fi-sender-phone" value="" disabled />
+        </div>
 
-      <div class="field half">
-        <label for="quote-quantity">Estimated Quantity</label>
-        <input type="text" id="quote-quantity" name="fi-text-quantity" placeholder="Example: 10" />
-      </div>
+        <div class="field half">
+          <label for="quote-project-type">Project Type *</label>
+          <select id="quote-project-type" name="fi-select-project_type" required>
+            <option value="">Select one</option>
+            <option value="CNC machining">CNC machining</option>
+            <option value="5-axis machining">5-axis machining</option>
+            <option value="Product prototype">Product prototype</option>
+            <option value="Repair or replacement part">Repair or replacement part</option>
+            <option value="Design help / CAD modeling">Design help / CAD modeling</option>
+            <option value="Inspection / measurement">Inspection / measurement</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
 
-      <div class="field half">
-        <label for="quote-material">Preferred Material</label>
-        <input type="text" id="quote-material" name="fi-text-preferred_material" placeholder="Aluminum, steel, plastic, etc." />
-      </div>
+        <div class="field half">
+          <label for="quote-quantity">Estimated Quantity</label>
+          <input type="text" id="quote-quantity" name="fi-text-quantity" placeholder="Example: 10" />
+        </div>
 
-      <div class="field half">
-        <label for="quote-deadline">Target Deadline</label>
-        <input type="text" id="quote-deadline" name="fi-text-target_deadline" placeholder="Example: 2 weeks" />
-      </div>
+        <div class="field half">
+          <label for="quote-material">Preferred Material</label>
+          <input type="text" id="quote-material" name="fi-text-preferred_material" placeholder="Aluminum, steel, plastic, etc." />
+        </div>
 
-      <div class="field">
-        <label>Quote Priorities</label>
-        <div class="quote-options">
-          <input type="checkbox" id="priority-cost" name="fi-text-quote_priorities" value="Lowest cost" />
-          <label for="priority-cost">Lowest cost</label>
+        <div class="field half">
+          <label for="quote-deadline">Target Deadline</label>
+          <input type="text" id="quote-deadline" name="fi-text-target_deadline" placeholder="Example: 2 weeks" />
+        </div>
 
-          <input type="checkbox" id="priority-speed" name="fi-text-quote_priorities" value="Fast turnaround" />
-          <label for="priority-speed">Fast turnaround</label>
+        <div class="field">
+          <label>Quote Priorities</label>
+          <div class="quote-options">
+            <input type="checkbox" id="priority-cost" name="fi-text-quote_priorities" value="Lowest cost" />
+            <label for="priority-cost">Lowest cost</label>
 
-          <input type="checkbox" id="priority-strength" name="fi-text-quote_priorities" value="High strength" />
-          <label for="priority-strength">High strength</label>
+            <input type="checkbox" id="priority-speed" name="fi-text-quote_priorities" value="Fast turnaround" />
+            <label for="priority-speed">Fast turnaround</label>
 
-          <input type="checkbox" id="priority-finish" name="fi-text-quote_priorities" value="Best surface finish" />
-          <label for="priority-finish">Best surface finish</label>
+            <input type="checkbox" id="priority-strength" name="fi-text-quote_priorities" value="High strength" />
+            <label for="priority-strength">High strength</label>
+
+            <input type="checkbox" id="priority-finish" name="fi-text-quote_priorities" value="Best surface finish" />
+            <label for="priority-finish">Best surface finish</label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="quote-message">Project Details *</label>
+          <textarea id="quote-message" name="fi-text-message" rows="7" required placeholder="Include dimensions, material, finish, tolerance requirements, use case, timeline, and anything else that helps quote accurately."></textarea>
+        </div>
+
+        <div class="field">
+          <div id="quote-recaptcha" aria-label="reCAPTCHA status"></div>
+          <input type="hidden" id="quote-recaptcha-response" name="g-recaptcha-response" value="" />
+        </div>
+
+        <div class="field">
+          <label for="quote-files">Upload Files</label>
+          <div class="quote-upload" id="quote-upload" tabindex="0" role="button" aria-label="Upload project files">
+            <span class="icon solid fa-upload"></span>
+            <strong>Drag files here or click to browse</strong>
+            <small>JPG, PNG, WEBP, PDF, STL, OBJ, STEP, STP, IGES, IGS, 3MF, ZIP. Max 25 MB per file.</small>
+            <input id="quote-files" name="fi-file-project_files" type="file" multiple accept=".jpg,.jpeg,.png,.webp,.pdf,.stl,.obj,.step,.stp,.iges,.igs,.3mf,.zip,image/jpeg,image/png,image/webp,application/pdf" />
+            <strong><small class="quote-note">Please avoid uploading confidential drawings unless you already have an agreement in place.</small></strong>
+          </div>
+          <ul id="quote-file-list" class="quote-file-list"></ul>
+          <p id="quote-file-error" class="quote-status quote-status-error" hidden>One or more files are not allowed or exceed the 25 MB per-file limit.</p>
         </div>
       </div>
 
-      <div class="field">
-        <label for="quote-message">Project Details *</label>
-        <textarea id="quote-message" name="fi-text-message" rows="7" required placeholder="Include dimensions, material, finish, tolerance requirements, use case, timeline, and anything else that helps us quote accurately."></textarea>
-      </div>
+      <input type="hidden" name="fi-text-form_type" value="Quote request" />
+      <input type="text" name="website" class="quote-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" />
 
-      <div class="field">
-        <div id="quote-recaptcha" aria-label="reCAPTCHA status"></div>
-        <input type="hidden" id="quote-recaptcha-response" name="g-recaptcha-response" value="" />
-      </div>
+      <ul class="actions special">
+        <li><button type="submit" class="button primary large">Submit Quote Request</button></li>
+      </ul>
 
-      <div class="field">
-          <label for="quote-files">Upload Files</label>
-          <div class="quote-upload" id="quote-upload" tabindex="0" role="button" aria-label="Upload project files">
-              <span class="icon solid fa-upload"></span>
-              <strong>Drag files here or click to browse</strong>
-              <small>JPG, PNG, WEBP, PDF, STL, OBJ, STEP, STP, IGES, IGS, 3MF, ZIP. Max 25 MB per file.</small>
-              <input id="quote-files" name="fi-file-project_files" type="file" multiple accept=".jpg,.jpeg,.png,.webp,.pdf,.stl,.obj,.step,.stp,.iges,.igs,.3mf,.zip,image/jpeg,image/png,image/webp,application/pdf" />
-              <strong>
-                  <small class="quote-note">(Please avoid uploading confidential drawings unless you already have an agreement in place)</small>
-              </strong>
-            </div>
-            <ul id="quote-file-list" class="quote-file-list"></ul>
-            <p id="quote-file-error" class="quote-status quote-status-error" hidden>One or more files are not allowed or exceed the 25 MB per-file limit.</p>
-      </div>
-    </div>
-
-    <input type="hidden" name="fi-text-form_type" value="Quote request" />
-    <input type="text" name="website" class="quote-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" />
-
-    <ul class="actions special">
-      <li><button type="submit" class="button primary large">Submit Quote Request</button></li>
-    </ul>
-
-    <p id="quote-form-status" class="quote-status" aria-live="polite"></p>
-  </form>
+      <p id="quote-form-status" class="quote-status" aria-live="polite"></p>
+    </form>
+  </div>
 </article>
