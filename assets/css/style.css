@@ -682,3 +682,259 @@ body {
         margin-top: 0.25rem;
     }
 }
+
+/* Refinement pass: softer surfaces, tighter copy, sticky navigation, and less motion. */
+:root {
+    --okc-page: #edf2f5;
+    --okc-surface: #f8fafb;
+    --okc-surface-strong: #fbfcfd;
+    --okc-panel: #f1f5f7;
+    --okc-line: #d7e0e7;
+    --okc-muted: #586777;
+    --shadow-soft: 0 1.2rem 3rem rgba(16, 24, 32, 0.12);
+}
+
+body {
+    background: #0d151d;
+}
+
+#wrapper {
+    background-color: #0d151d;
+    background-image:
+        linear-gradient(180deg, rgba(8, 14, 20, 0.28), rgba(8, 14, 20, 0.94)),
+        url("../images/landing/hero-precision-machining.jpg");
+}
+
+#intro h1 {
+    font-size: clamp(2.75rem, 7vw, 6rem);
+    max-width: 70rem;
+}
+
+#intro p:not(.eyebrow) {
+    max-width: 52rem;
+}
+
+#header .logo {
+    background: rgba(16, 24, 32, 0.18);
+}
+
+#nav {
+    background: rgba(15, 25, 35, 0.82);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 0.65rem 1.7rem rgba(6, 12, 18, 0.16);
+    position: sticky;
+    top: 0;
+    z-index: 10000;
+}
+
+#nav ul.links li.active {
+    background: #edf3f7;
+}
+
+#nav ul.links li.active a {
+    color: var(--okc-dark) !important;
+}
+
+#main {
+    background: var(--okc-page);
+    box-shadow: var(--shadow-soft);
+    scroll-margin-top: 4.5rem;
+}
+
+#main > .post.landing-page,
+#main > .post.quote-page {
+    background: var(--okc-page);
+}
+
+.landing-page p,
+.quote-page p,
+.landing-page li,
+.quote-page li,
+.service-card p,
+.process-step p,
+.materials-copy p,
+.landing-copy p,
+.quote-sidebar p,
+.quote-sidebar li {
+    text-align: left;
+}
+
+.section-heading,
+.section-heading p,
+.quote-header,
+.quote-header p,
+.cta-panel,
+.cta-panel h2,
+.cta-panel p {
+    text-align: center;
+}
+
+.landing-hero-card,
+.experience-block,
+.materials-section,
+.quote-layout {
+    background: var(--okc-surface);
+}
+
+.landing-hero-card {
+    background:
+        radial-gradient(circle at top left, rgba(24, 191, 239, 0.08), transparent 28rem),
+        var(--okc-surface);
+}
+
+.landing-copy h2 {
+    letter-spacing: 0.045em;
+}
+
+.card-media,
+.materials-image,
+.stacked-media img {
+    background: #dde5eb;
+}
+
+.card-media img {
+    object-position: center center;
+}
+
+.stacked-media img:first-child {
+    object-position: center 50%;
+}
+
+.stacked-media img:last-child {
+    object-position: center center;
+}
+
+.materials-image img {
+    object-position: center center;
+}
+
+.service-grid {
+    gap: 1.15rem;
+}
+
+.service-card {
+    background: var(--okc-surface-strong);
+    padding: 1.65rem;
+    text-align: left;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.service-card:hover {
+    background: #ffffff;
+    border-color: rgba(24, 191, 239, 0.38);
+    box-shadow: 0 0.8rem 1.8rem rgba(16, 24, 32, 0.07);
+    transform: none;
+}
+
+.service-card h3 {
+    line-height: 1.3;
+    margin-bottom: 0.75rem;
+}
+
+.service-card p,
+.process-step p {
+    margin-bottom: 0;
+}
+
+.service-icon {
+    background: #edf5f8;
+}
+
+.capability-band {
+    background:
+        linear-gradient(135deg, rgba(16, 24, 32, 0.98), rgba(23, 36, 51, 0.94)),
+        url("../images/landing/cnc-probing.jpg") center / cover;
+    color: #ffffff;
+}
+
+.capability-heading {
+    display: grid;
+    grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+    gap: 2.5rem;
+    margin-bottom: 2rem;
+    align-items: end;
+}
+
+.capability-heading h2 {
+    color: #ffffff;
+    font-size: clamp(1.75rem, 3vw, 2.7rem);
+    line-height: 1.16;
+    margin-bottom: 0;
+}
+
+.capability-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.capability-grid > div {
+    background: rgba(9, 17, 24, 0.68);
+    padding: 1.45rem;
+}
+
+.capability-grid h3 {
+    color: #ffffff;
+    font-size: 0.95rem;
+    line-height: 1.35;
+    margin-bottom: 0.7rem;
+}
+
+.capability-grid p {
+    color: rgba(255, 255, 255, 0.74);
+    font-size: 0.9rem;
+    line-height: 1.7;
+    margin-bottom: 0;
+    text-align: left;
+}
+
+.process-section,
+#footer {
+    background: #e8eef2;
+}
+
+.process-step,
+.quote-sidebar,
+.quote-file-list li {
+    background: var(--okc-surface-strong);
+}
+
+.cta-panel {
+    background:
+        linear-gradient(135deg, rgba(16, 24, 32, 0.94), rgba(23, 36, 51, 0.9)),
+        url("../images/landing/machined-components.jpg") center / cover;
+}
+
+.quote-sidebar {
+    top: 5.5rem;
+}
+
+#footer .footer-quote {
+    background: var(--okc-surface);
+}
+
+@media screen and (max-width: 980px) {
+    .capability-heading,
+    .capability-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media screen and (max-width: 736px) {
+    #intro h1 {
+        font-size: clamp(2.35rem, 13vw, 4rem);
+    }
+
+    #nav {
+        position: relative;
+        top: auto;
+    }
+
+    .capability-grid > div {
+        padding: 1.25rem;
+    }
+}

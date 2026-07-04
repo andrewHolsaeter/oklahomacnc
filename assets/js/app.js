@@ -51,9 +51,17 @@ function scrollToSection(section) {
   });
 }
 
+function scrollToMain() {
+  requestAnimationFrame(() => {
+    if (content) {
+      content.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  });
+}
+
 function goToPage(page) {
   history.pushState({}, "", `#${page}`);
-  loadPage(page);
+  loadPage(page).then(scrollToMain);
 }
 
 function goToSection(section) {
